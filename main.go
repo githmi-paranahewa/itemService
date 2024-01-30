@@ -13,11 +13,11 @@ import (
 )
 
 type Item struct {
-	ID         string
-	Name       string
-	Price      float64
-	Quantity   int
-	OrderItems []OrderItem `gorm:"foreignKey:ItemID"`
+	ID       string
+	Name     string
+	Price    float64
+	Quantity int
+	// OrderItems []OrderItem `gorm:"foreignKey:ItemID"`
 }
 
 type OrderItem struct {
