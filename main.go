@@ -97,5 +97,5 @@ func main() {
 	r.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
 	r.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
 	r.HandleFunc("/item/{itemId}", DeleteItem).Methods("DELETE")
-	log.Fatal(http.ListenAndServe("localhost:9010", r))
+	log.Fatal(http.ListenAndServe(":9010", r))
 }
