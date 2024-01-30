@@ -20,17 +20,17 @@ type Item struct {
 	// OrderItems []OrderItem `gorm:"foreignKey:ItemID"`
 }
 
-type OrderItem struct {
-	ItemID   string
-	Quantity int
-	OrderID  string `gorm:"foreignKey:OrderID"`
-}
+// type OrderItem struct {
+// 	ItemID   string
+// 	Quantity int
+// 	OrderID  string `gorm:"foreignKey:OrderID"`
+// }
 
-type Order struct {
-	Items  []OrderItem
-	Total  float64
-	Status string
-}
+// type Order struct {
+// 	Items  []OrderItem
+// 	Total  float64
+// 	Status string
+// }
 
 var items []Item
 
