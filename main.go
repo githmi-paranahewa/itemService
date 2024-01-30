@@ -1,14 +1,18 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"os"
+
 	// "fmt"
-	"log"
+	// "log"
 	"math/rand"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/oauth2/clientcredentials"
 	// "golang.org/x/tools/go/analysis/passes/appends"
 )
 
@@ -31,6 +35,12 @@ type Item struct {
 // 	Total  float64
 // 	Status string
 // }
+
+var clientCredsConfig = clientcredentials.Config{
+	ClientID:     "CLIENT_ID",
+	ClientSecret: "CLIENT_SECRET",
+	TokenURL:     "TOKEN_URL",
+}
 
 var items []Item
 
@@ -89,6 +99,11 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := mux.NewRouter()
+	client := clientCredsConfig.Client(context.Background())
+	serviceURL := os.Getenv("SERVICE_URL")
+	// clientID := os.Getenv("CONSUMER_KEY")
+	// clientSecret := os.Getenv("CONSUMER_SECRET")
+	// tokenURL := os.Getenv("TOKEN_URL")
 
 	items = append(items, Item{ID: "1", Name: "Book", Price: 300, Quantity: 10})
 	items = append(items, Item{ID: "2", Name: "Pen", Price: 40, Quantity: 20})
@@ -97,5 +112,23 @@ func main() {
 	r.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
 	r.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
 	r.HandleFunc("/item/{itemId}", DeleteItem).Methods("DELETE")
-	log.Fatal(http.ListenAndServe(":9010", r))
+	http.Handle("/", authenticateMiddleware(client, serviceURL)(r))
+
+	http.ListenAndServe(":9010", nil)
+
+	// log.Fatal(http.ListenAndServe(":9010", r))
+}
+func authenticateMiddleware(client *http.Client, serviceURL string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Authenticate the request using the provided client
+			_, err := client.Get(serviceURL)
+			if err != nil {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
 }
