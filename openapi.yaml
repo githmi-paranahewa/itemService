@@ -127,15 +127,15 @@ paths:
             text/plain:
               schema:
                 type: string
-    delete:
-      tags:
-        - default
-      summary: delete
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
+    # delete:
+    #   tags:
+    #     - default
+    #   summary: delete
+    #   responses:
+    #     "200":
+    #       description: Successful response
+    #       content:
+    #         application/json: {}
      put:
       tags:
         - default
