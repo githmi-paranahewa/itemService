@@ -1,8 +1,10 @@
 package main
 
 import (
-	"context"
+
+	// "context"
 	"encoding/json"
+	"fmt"
 	"os"
 
 	// "fmt"
@@ -12,6 +14,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	// "golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	// "golang.org/x/tools/go/analysis/passes/appends"
 )
@@ -37,6 +40,7 @@ type Item struct {
 // }
 
 var clientCredsConfig = clientcredentials.Config{
+
 	ClientID:     "CLIENT_ID",
 	ClientSecret: "CLIENT_SECRET",
 	TokenURL:     "TOKEN_URL",
@@ -99,36 +103,74 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := mux.NewRouter()
-	client := clientCredsConfig.Client(context.Background())
-	serviceURL := os.Getenv("SERVICE_URL")
+	// conf := &oauth2.Config{
+	// 	ClientID:     "YOUR_CLIENT_ID",
+	// 	ClientSecret: "YOUR_CLIENT_SECRET",
+
+	// 	Scopes: []string{"SCOPE1", "SCOPE2"},
+	// 	Endpoint: oauth2.Endpoint{
+	// 		AuthURL:  "https://provider.com/o/oauth2/auth",
+	// 		TokenURL: "TOKEN_URL",
+	// 	},
+	// }
+	// client := clientCredsConfig.Client(context.Background())
+	os.Setenv("ServiceURL", "SERVICE_URL")
+	// serviceURL := os.Getenv("ServiceURL")
+	h, err := os.LookupEnv("ServiceURL")
+	fmt.Print("hi", h, "HH", err)
+	rootRouter := r.PathPrefix("/").Subrouter()
+	rootRouter.Use(authenticateMiddlewaretest)
+	fmt.Print("hi")
 	// clientID := os.Getenv("CONSUMER_KEY")
 	// clientSecret := os.Getenv("CONSUMER_SECRET")
 	// tokenURL := os.Getenv("TOKEN_URL")
 
 	items = append(items, Item{ID: "1", Name: "Book", Price: 300, Quantity: 10})
 	items = append(items, Item{ID: "2", Name: "Pen", Price: 40, Quantity: 20})
-	r.HandleFunc("/item", AddItem).Methods("POST")
-	r.HandleFunc("/item", GetItem).Methods("GET")
-	r.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
-	r.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
-	r.HandleFunc("/item/{itemId}", DeleteItem).Methods("DELETE")
-	http.Handle("/", authenticateMiddleware(client, serviceURL)(r))
+	rootRouter.HandleFunc("/item", AddItem).Methods("POST")
+	rootRouter.HandleFunc("/item", GetItem).Methods("GET")
+	rootRouter.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
+	rootRouter.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
+	rootRouter.HandleFunc("/item/{itemId}", DeleteItem).Methods("DELETE")
+	// http.Handle("/", authenticateMiddleware(client, serviceURL)(r))
 
-	http.ListenAndServe(":9010", nil)
+	http.ListenAndServe(":9010", rootRouter)
 
 	// log.Fatal(http.ListenAndServe(":9010", r))
 }
-func authenticateMiddleware(client *http.Client, serviceURL string) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Authenticate the request using the provided client
-			_, err := client.Get(serviceURL)
-			if err != nil {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
-				return
-			}
 
-			next.ServeHTTP(w, r)
-		})
-	}
+// func authenticateMiddleware(client *http.Client, serviceURL string) func(http.Handler) http.Handler {
+// 	return func(next http.Handler) http.Handler {
+// 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+// 			// params := mux.Vars(r)
+// 			a, err := client.Get(serviceURL)
+
+// 			if err != nil {
+// 				fmt.Println("url", a, "error", err)
+// 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 				return
+// 			}
+// 			fmt.Println("url")
+// 			next.ServeHTTP(w, r)
+// 		})
+// 	}
+// }
+
+func authenticateMiddlewaretest(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("middleware2")
+		// client := clientCredsConfig.Client(context.Background())
+		// os.Setenv("ServiceURL", "SERVICE_URL")
+		// serviceURL := os.Getenv("ServiceURL")
+		// h, err := os.LookupEnv(e)
+		// a, err := client.Get(serviceURL)
+		// if err != nil {
+		// 	fmt.Println("url", a, "error", err)
+		// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		// 	return
+		// }
+
+		next.ServeHTTP(w, r)
+	})
 }
