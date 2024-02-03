@@ -1,6 +1,6 @@
 # # openapi: 3.0.0
 # # info:
-# #   title: order-api
+# #   title: item-api
 # #   version: 1.0.0
 # # servers:
 # #   - url: http://localhost:9090
@@ -72,6 +72,93 @@
 # #           content:
 # #             application/json: {}
 
+# openapi: 3.0.0
+# info:
+#   title: item-api
+#   version: 1.0.0
+# # servers:
+# #   - url: http://orderservice-3556955799:9090
+# paths:
+#   /item:
+#     post:
+#       tags:
+#         - default
+#       summary: create
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               $ref: "#/components/schemas/ItemInput"
+#       responses:
+#         "200":
+#           description: Successful response
+#           content:
+#             application/json: {}
+
+#     get:
+#       tags:
+#         - default
+#       summary: get
+#       responses:
+#         "200":
+#           description: Successful response
+#           content:
+#             text/plain:
+#               schema:
+#                 type: string
+#       deprecated: false
+#       security: []
+#   /item/{id}:
+#     parameters:
+#       - name: id
+#         in: path
+#         required: true
+#         schema:
+#           type: string
+    
+#     delete:
+#       tags:
+#         - default
+#       summary: delete
+#       responses:
+#         "200":
+#           description: Successful response
+#           content:
+#             application/json: {}
+#      put:
+#       tags:
+#         - default
+#       summary: update
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               $ref: "#/components/schemas/ItemInput"
+#       responses:
+#         "200":
+#           description: Successful response
+#           content:
+#             application/json: {}
+
+# components:
+#   schemas:
+#     ItemInput:
+#       type: object
+#       properties:
+#         ID:
+#           type: string
+#         Name:
+#           type: string
+#         Price:
+#           type: number
+#         Quantity:
+#           type: number
+
+
+
+
 openapi: 3.0.0
 info:
   title: item-api
@@ -95,7 +182,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-
+    
     get:
       tags:
         - default
@@ -116,17 +203,8 @@ paths:
         required: true
         schema:
           type: string
-    
-    delete:
-      tags:
-        - default
-      summary: delete
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json: {}
-     put:
+
+    put:
       tags:
         - default
       summary: update
@@ -136,6 +214,29 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ItemInput"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+
+     get:
+      tags:
+        - default
+      summary: get
+      responses:
+        "200":
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+       deprecated: false
+      security: []
+    delete:
+      tags:
+        - default
+      summary: delete
       responses:
         "200":
           description: Successful response
@@ -152,6 +253,6 @@ components:
         Name:
           type: string
         Price:
-          type: number
+          type: integer
         Quantity:
-          type: number
+          type: integer
