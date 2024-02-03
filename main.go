@@ -5,7 +5,8 @@ import (
 	// "context"
 	"encoding/json"
 	"fmt"
-	"os"
+	"log"
+	// "os"
 
 	// "fmt"
 	// "log"
@@ -15,7 +16,7 @@ import (
 
 	"github.com/gorilla/mux"
 	// "golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
+	// "golang.org/x/oauth2/clientcredentials"
 	// "golang.org/x/tools/go/analysis/passes/appends"
 )
 
@@ -39,12 +40,12 @@ type Item struct {
 // 	Status string
 // }
 
-var clientCredsConfig = clientcredentials.Config{
+// var clientCredsConfig = clientcredentials.Config{
 
-	ClientID:     "CLIENT_ID",
-	ClientSecret: "CLIENT_SECRET",
-	TokenURL:     "TOKEN_URL",
-}
+// 	ClientID:     "CLIENT_ID",
+// 	ClientSecret: "CLIENT_SECRET",
+// 	TokenURL:     "TOKEN_URL",
+// }
 
 var items []Item
 
@@ -114,27 +115,29 @@ func main() {
 	// 	},
 	// }
 	// client := clientCredsConfig.Client(context.Background())
-	os.Setenv("ServiceURL", "SERVICE_URL")
+	// os.Setenv("ServiceURL", "SERVICE_URL")
 	// serviceURL := os.Getenv("ServiceURL")
-	h, err := os.LookupEnv("ServiceURL")
-	fmt.Print("hi", h, "HH", err)
-	rootRouter := r.PathPrefix("/").Subrouter()
-	rootRouter.Use(authenticateMiddlewaretest)
-	fmt.Print("hi")
-	// clientID := os.Getenv("CONSUMER_KEY")
+	// h, err := os.LookupEnv("ServiceURL")
+	// fmt.Print("hi", h, "HH", err)
+	// rootRouter := r.PathPrefix("/").Subrouter()
+	// rootRouter.Use(authenticateMiddlewaretest)
+	// fmt.Print("hi")
+	// // clientID := os.Getenv("CONSUMER_KEY")
 	// clientSecret := os.Getenv("CONSUMER_SECRET")
 	// tokenURL := os.Getenv("TOKEN_URL")
 
 	items = append(items, Item{ID: "1", Name: "Book", Price: 300, Quantity: 10})
 	items = append(items, Item{ID: "2", Name: "Pen", Price: 40, Quantity: 20})
-	rootRouter.HandleFunc("/item", AddItem).Methods("POST")
-	rootRouter.HandleFunc("/item", GetItem).Methods("GET")
-	rootRouter.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
-	rootRouter.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
-	rootRouter.HandleFunc("/item/{itemId}", DeleteItem).Methods("DELETE")
+	r.HandleFunc("/order", AddItem).Methods("POST")
+	r.HandleFunc("/order", GetItem).Methods("GET")
+	r.HandleFunc("/order/{orderId}", GetItemById).Methods("GET")
+	r.HandleFunc("/order/{orderId}", UpdateItem).Methods("PUT")
+	r.HandleFunc("/order/{orderId}", DeleteItem).Methods("DELETE")
+	log.Fatal(http.ListenAndServe(":9090", r))
+
 	// http.Handle("/", authenticateMiddleware(client, serviceURL)(r))
 
-	http.ListenAndServe(":9010", rootRouter)
+	// http.ListenAndServe(":9010", rootRouter)
 
 	// log.Fatal(http.ListenAndServe(":9010", r))
 }
