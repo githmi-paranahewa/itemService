@@ -4,6 +4,7 @@ import (
 
 	// "context"
 	"encoding/json"
+	"fmt"
 	// "fmt"
 	"log"
 	// "os"
@@ -86,20 +87,52 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(item)
 }
 
+// func UpdateItem(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "pkgication/json")
+// 	params := mux.Vars(r)
+// 	for _, instance := range items {
+// 		if instance.ID == params["itemId"] {
+// 			// items = append(items[:index], items[index+1:]...)
+// 			var item Item
+// 			_ = json.NewDecoder(r.Body).Decode(&item)
+
+// 			item.ID = params["itemId"]
+// 			item.Name = params[""]
+// 			items = append(items, item)
+// 			json.NewEncoder(w).Encode(item)
+// 		}
+// 	}
+
+// }
+
 func UpdateItem(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "pkgication/json")
+	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
+	fmt.Println("hi")
 	for index, instance := range items {
+		fmt.Println("hi index", index)
+		fmt.Println("hi outside of ", instance.ID, " para ", params["itemId"])
 		if instance.ID == params["itemId"] {
-			items = append(items[:index], items[index+1:]...)
-			var item Item
-			_ = json.NewDecoder(r.Body).Decode(&item)
-			item.ID = params["itemId"]
-			items = append(items, item)
-			json.NewEncoder(w).Encode(item)
+			fmt.Println("hi inside of ", instance.ID)
+			var updatedItem Item
+			err := json.NewDecoder(r.Body).Decode(&updatedItem)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+
+			// Update the existing item
+			updatedItem.ID = params["itemId"]
+			items[index] = updatedItem
+
+			// Respond with the updated item
+			json.NewEncoder(w).Encode(updatedItem)
+			return
 		}
 	}
 
+	// If the item with the specified ID is not found
+	http.NotFound(w, r)
 }
 
 func main() {
