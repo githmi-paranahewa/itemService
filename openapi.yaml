@@ -116,17 +116,7 @@ paths:
         required: true
         schema:
           type: string
-    get:
-      tags:
-        - default
-      summary: get
-      responses:
-        "200":
-          description: Successful response
-          content:
-            text/plain:
-              schema:
-                type: string
+    
     delete:
       tags:
         - default

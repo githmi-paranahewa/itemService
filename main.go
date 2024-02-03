@@ -4,7 +4,7 @@ import (
 
 	// "context"
 	"encoding/json"
-	"fmt"
+	// "fmt"
 	"log"
 	// "os"
 
@@ -160,20 +160,20 @@ func main() {
 // 	}
 // }
 
-func authenticateMiddlewaretest(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("middleware2")
-		// client := clientCredsConfig.Client(context.Background())
-		// os.Setenv("ServiceURL", "SERVICE_URL")
-		// serviceURL := os.Getenv("ServiceURL")
-		// h, err := os.LookupEnv(e)
-		// a, err := client.Get(serviceURL)
-		// if err != nil {
-		// 	fmt.Println("url", a, "error", err)
-		// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
-		// 	return
-		// }
+// func authenticateMiddlewaretest(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		fmt.Println("middleware2")
+// 		// client := clientCredsConfig.Client(context.Background())
+// 		// os.Setenv("ServiceURL", "SERVICE_URL")
+// 		// serviceURL := os.Getenv("ServiceURL")
+// 		// h, err := os.LookupEnv(e)
+// 		// a, err := client.Get(serviceURL)
+// 		// if err != nil {
+// 		// 	fmt.Println("url", a, "error", err)
+// 		// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 		// 	return
+// 		// }
 
-		next.ServeHTTP(w, r)
-	})
-}
+// 		next.ServeHTTP(w, r)
+// 	})
+// }
