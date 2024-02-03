@@ -116,7 +116,7 @@
 #         required: true
 #         schema:
 #           type: string
-    
+
 #     delete:
 #       tags:
 #         - default
@@ -156,9 +156,6 @@
 #         Quantity:
 #           type: number
 
-
-
-
 openapi: 3.0.0
 info:
   title: item-api
@@ -182,7 +179,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-    
+
     get:
       tags:
         - default
@@ -220,19 +217,6 @@ paths:
           content:
             application/json: {}
 
-     get:
-      tags:
-        - default
-      summary: get
-      responses:
-        "200":
-          description: Successful response
-          content:
-            text/plain:
-              schema:
-                type: string
-       deprecated: false
-      security: []
     delete:
       tags:
         - default
