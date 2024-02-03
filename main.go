@@ -127,7 +127,7 @@ func main() {
 
 	items = append(items, Item{ID: "1", Name: "Book", Price: 300, Quantity: 10})
 	items = append(items, Item{ID: "2", Name: "Pen", Price: 40, Quantity: 20})
-	// rootRouter.HandleFunc("/item", AddItem).Methods("POST")
+	rootRouter.HandleFunc("/item", AddItem).Methods("POST")
 	rootRouter.HandleFunc("/item", GetItem).Methods("GET")
 	rootRouter.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
 	rootRouter.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
