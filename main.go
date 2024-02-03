@@ -128,12 +128,12 @@ func main() {
 
 	items = append(items, Item{ID: "1", Name: "Book", Price: 300, Quantity: 10})
 	items = append(items, Item{ID: "2", Name: "Pen", Price: 40, Quantity: 20})
-	r.HandleFunc("/order", AddItem).Methods("POST")
-	r.HandleFunc("/order", GetItem).Methods("GET")
-	r.HandleFunc("/order/{orderId}", GetItemById).Methods("GET")
-	r.HandleFunc("/order/{orderId}", UpdateItem).Methods("PUT")
-	r.HandleFunc("/order/{orderId}", DeleteItem).Methods("DELETE")
-	log.Fatal(http.ListenAndServe(":9090", r))
+	r.HandleFunc("/item", AddItem).Methods("POST")
+	r.HandleFunc("/item", GetItem).Methods("GET")
+	r.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
+	r.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
+	r.HandleFunc("/item/{itemId}", DeleteItem).Methods("DELETE")
+	log.Fatal(http.ListenAndServe(":9010", r))
 
 	// http.Handle("/", authenticateMiddleware(client, serviceURL)(r))
 
