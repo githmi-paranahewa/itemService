@@ -1,24 +1,15 @@
 package main
 
 import (
-
-	// "context"
 	"encoding/json"
 	"fmt"
-	// "fmt"
 	"log"
-	// "os"
 
-	// "fmt"
-	// "log"
 	"math/rand"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
-	// "golang.org/x/oauth2"
-	// "golang.org/x/oauth2/clientcredentials"
-	// "golang.org/x/tools/go/analysis/passes/appends"
 )
 
 type Item struct {
@@ -26,20 +17,7 @@ type Item struct {
 	Name     string
 	Price    float64
 	Quantity int
-	// OrderItems []OrderItem `gorm:"foreignKey:ItemID"`
 }
-
-// type OrderItem struct {
-// 	ItemID   string
-// 	Quantity int
-// 	OrderID  string `gorm:"foreignKey:OrderID"`
-// }
-
-// type Order struct {
-// 	Items  []OrderItem
-// 	Total  float64
-// 	Status string
-// }
 
 // var clientCredsConfig = clientcredentials.Config{
 
@@ -61,10 +39,12 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 	for index, instance := range items {
 		if instance.ID == params["itemId"] {
 			items = append(items[:index], items[index+1:]...)
-			break
+			json.NewEncoder(w).Encode("Successfully Deleted the Item")
+			return
 		}
 	}
-	json.NewEncoder(w).Encode(items)
+
+	http.NotFound(w, r)
 }
 
 func GetItemById(w http.ResponseWriter, r *http.Request) {
@@ -76,6 +56,7 @@ func GetItemById(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	http.NotFound(w, r)
 }
 
 func AddItem(w http.ResponseWriter, r *http.Request) {
@@ -86,24 +67,6 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	items = append(items, item)
 	json.NewEncoder(w).Encode(item)
 }
-
-// func UpdateItem(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Content-Type", "pkgication/json")
-// 	params := mux.Vars(r)
-// 	for _, instance := range items {
-// 		if instance.ID == params["itemId"] {
-// 			// items = append(items[:index], items[index+1:]...)
-// 			var item Item
-// 			_ = json.NewDecoder(r.Body).Decode(&item)
-
-// 			item.ID = params["itemId"]
-// 			item.Name = params[""]
-// 			items = append(items, item)
-// 			json.NewEncoder(w).Encode(item)
-// 		}
-// 	}
-
-// }
 
 func UpdateItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -120,93 +83,27 @@ func UpdateItem(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-
-			// Update the existing item
 			updatedItem.ID = params["itemId"]
 			items[index] = updatedItem
 
-			// Respond with the updated item
 			json.NewEncoder(w).Encode(updatedItem)
 			return
 		}
 	}
 
-	// If the item with the specified ID is not found
 	http.NotFound(w, r)
 }
 
 func main() {
 	r := mux.NewRouter()
-	// conf := &oauth2.Config{
-	// 	ClientID:     "YOUR_CLIENT_ID",
-	// 	ClientSecret: "YOUR_CLIENT_SECRET",
-
-	// 	Scopes: []string{"SCOPE1", "SCOPE2"},
-	// 	Endpoint: oauth2.Endpoint{
-	// 		AuthURL:  "https://provider.com/o/oauth2/auth",
-	// 		TokenURL: "TOKEN_URL",
-	// 	},
-	// }
-	// client := clientCredsConfig.Client(context.Background())
-	// os.Setenv("ServiceURL", "SERVICE_URL")
-	// serviceURL := os.Getenv("ServiceURL")
-	// h, err := os.LookupEnv("ServiceURL")
-	// fmt.Print("hi", h, "HH", err)
-	// rootRouter := r.PathPrefix("/").Subrouter()
-	// rootRouter.Use(authenticateMiddlewaretest)
-	// fmt.Print("hi")
-	// // clientID := os.Getenv("CONSUMER_KEY")
-	// clientSecret := os.Getenv("CONSUMER_SECRET")
-	// tokenURL := os.Getenv("TOKEN_URL")
 
 	items = append(items, Item{ID: "1", Name: "Book", Price: 300, Quantity: 10})
 	items = append(items, Item{ID: "2", Name: "Pen", Price: 40, Quantity: 20})
+
 	r.HandleFunc("/item", AddItem).Methods("POST")
 	r.HandleFunc("/item", GetItem).Methods("GET")
 	r.HandleFunc("/item/{itemId}", GetItemById).Methods("GET")
 	r.HandleFunc("/item/{itemId}", UpdateItem).Methods("PUT")
 	r.HandleFunc("/item/{itemId}", DeleteItem).Methods("DELETE")
 	log.Fatal(http.ListenAndServe(":9010", r))
-
-	// http.Handle("/", authenticateMiddleware(client, serviceURL)(r))
-
-	// http.ListenAndServe(":9010", rootRouter)
-
-	// log.Fatal(http.ListenAndServe(":9010", r))
 }
-
-// func authenticateMiddleware(client *http.Client, serviceURL string) func(http.Handler) http.Handler {
-// 	return func(next http.Handler) http.Handler {
-// 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-// 			// params := mux.Vars(r)
-// 			a, err := client.Get(serviceURL)
-
-// 			if err != nil {
-// 				fmt.Println("url", a, "error", err)
-// 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
-// 				return
-// 			}
-// 			fmt.Println("url")
-// 			next.ServeHTTP(w, r)
-// 		})
-// 	}
-// }
-
-// func authenticateMiddlewaretest(next http.Handler) http.Handler {
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		fmt.Println("middleware2")
-// 		// client := clientCredsConfig.Client(context.Background())
-// 		// os.Setenv("ServiceURL", "SERVICE_URL")
-// 		// serviceURL := os.Getenv("ServiceURL")
-// 		// h, err := os.LookupEnv(e)
-// 		// a, err := client.Get(serviceURL)
-// 		// if err != nil {
-// 		// 	fmt.Println("url", a, "error", err)
-// 		// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
-// 		// 	return
-// 		// }
-
-// 		next.ServeHTTP(w, r)
-// 	})
-// }
