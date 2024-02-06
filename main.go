@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"math/rand"
@@ -18,13 +17,6 @@ type Item struct {
 	Price    float64
 	Quantity int
 }
-
-// var clientCredsConfig = clientcredentials.Config{
-
-// 	ClientID:     "CLIENT_ID",
-// 	ClientSecret: "CLIENT_SECRET",
-// 	TokenURL:     "TOKEN_URL",
-// }
 
 var items []Item
 
@@ -71,12 +63,8 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 func UpdateItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
-	fmt.Println("hi")
 	for index, instance := range items {
-		fmt.Println("hi index", index)
-		fmt.Println("hi outside of ", instance.ID, " para ", params["itemId"])
 		if instance.ID == params["itemId"] {
-			fmt.Println("hi inside of ", instance.ID)
 			var updatedItem Item
 			err := json.NewDecoder(r.Body).Decode(&updatedItem)
 			if err != nil {
