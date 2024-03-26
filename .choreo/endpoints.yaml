@@ -23,7 +23,7 @@ endpoints:
     # +optional Path to the service overview content file.
     # This is only applicable if the service publisher wishes to add an overview via source repository.
     # The path should be relative to the docker context.
-    overviewFilePath:
+
     # +optional Path to the service documentation folder.
     # This is only applicable if the service publisher wishes to add documents via source repository..
     # The path should be relative to the docker context.
