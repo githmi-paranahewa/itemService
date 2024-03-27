@@ -5,7 +5,7 @@ info:
 # servers:
 #   - url: http://orderservice-3556955799:9090
 paths:
-  /item:
+  /order:
     get:
       tags:
         - default
