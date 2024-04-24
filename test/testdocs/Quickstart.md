@@ -4,6 +4,8 @@ in test/testdocs
 
 Welcome to ItemService! This quick start guide will help you get up and running with our document management service in no time.
 
+![Alt text](er3.png)
+
 ## Step 1: Sign Up
 
 1. Visit [www.itemservice.com](https://www.itemservice.com) in your web browser.
