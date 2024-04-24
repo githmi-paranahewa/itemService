@@ -4,7 +4,7 @@ in test/testdocs
 
 Welcome to ItemService! This quick start guide will help you get up and running with our document management service in no time.
 
-![Alt text](er3.png)
+![Alt text](img.png)
 
 ## Step 1: Sign Up
 
