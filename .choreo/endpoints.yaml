@@ -25,7 +25,7 @@ endpoints:
     # This is only applicable if the service publisher wishes to add an readme and additional documents via source repository.
     # The path should be relative to the docker context.
     documentation:
-      readmeFilePath: test/overviewcontent.md
+      readmeFilePath:
       documentationSourcePath: test/testdocs
 
   # +required Unique name for the endpoint. (This name will be used when generating the managed API)
@@ -45,3 +45,6 @@ endpoints:
     # This is only applicable to REST endpoint types.
     # The path should be relative to the docker context.
     schemaFilePath: openapi2.yaml
+    documentation:
+      readmeFilePath: test/overviewcontent.md
+      documentationSourcePath:
