@@ -1,4 +1,4 @@
-# Quick Start Guide
+#
 
 in test/testdocs
 

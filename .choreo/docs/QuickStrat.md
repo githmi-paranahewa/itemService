@@ -1,5 +1,3 @@
-# Quick Start Guide
-
 in docs
 
 Welcome to ItemService! This quick start guide will help you get up and running with our document management service in no time.
